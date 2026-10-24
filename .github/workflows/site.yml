@@ -1,0 +1,46 @@
+# Based on the Upptime v1.46.3 template (https://github.com/upptime/upptime, MIT).
+# Changes: actions pinned by SHA, explicit token permissions, GitHub App / PAT
+# token steps removed (the built-in GITHUB_TOKEN is used; no secrets).
+name: Static Site CI
+on:
+  push:
+    paths:
+      - "assets/**"
+      - ".upptimerc.yml"
+  schedule:
+    - cron: "0 1 * * *"
+  repository_dispatch:
+    types: [static_site]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  release:
+    name: Build and deploy site
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          # Upptime commits its data back to this repo with this token.
+          persist-credentials: true # zizmor: ignore[artipacked]
+      - name: Generate site
+        uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # v1.46.3
+        with:
+          command: "site"
+        env:
+          GH_PAT: ${{ github.token }}
+      - name: GitHub Pages Deploy
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: "site/status-page/__sapper__/export/"
+          force_orphan: "false"
+          user_name: "Upptime Bot"
+          user_email: "73812536+upptime-bot@users.noreply.github.com"

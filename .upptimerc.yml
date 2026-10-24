@@ -1,0 +1,32 @@
+# Upptime (https://github.com/upptime/upptime, MIT) config for fanettiai.com.
+# Uptime data only: no site code and no secrets live in this repo.
+owner: jonfanetti-art
+repo: fanetti-status
+
+sites:
+  - name: Home
+    url: https://www.fanettiai.com/
+  - name: Apex redirect (fanettiai.com)
+    url: https://fanettiai.com/
+  - name: Software
+    url: https://www.fanettiai.com/software/
+  - name: Benchmarks
+    url: https://www.fanettiai.com/benchmarks/
+  - name: Learn
+    url: https://www.fanettiai.com/learn/
+  - name: Support
+    url: https://www.fanettiai.com/support/
+
+status-website:
+  # Default GitHub Pages address (https://jonfanetti-art.github.io/fanetti-status/); no custom domain.
+  baseUrl: /fanetti-status
+  name: Fanetti AI status
+  introTitle: "**Fanetti AI** uptime"
+  introMessage: Automated checks of www.fanettiai.com every five minutes, run by [Upptime](https://upptime.js.org) on GitHub Actions.
+  navbar:
+    - title: Status
+      href: /
+    - title: fanettiai.com
+      href: https://www.fanettiai.com/
+    - title: GitHub
+      href: https://github.com/$OWNER/$REPO

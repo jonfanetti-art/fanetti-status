@@ -1,0 +1,34 @@
+# Based on the Upptime v1.46.3 template (https://github.com/upptime/upptime, MIT).
+# Changes: actions pinned by SHA, explicit token permissions, GitHub App / PAT
+# token steps removed (the built-in GITHUB_TOKEN is used; no secrets).
+name: Summary CI
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  repository_dispatch:
+    types: [summary]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  release:
+    name: Update summary
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          # Upptime commits its data back to this repo with this token.
+          persist-credentials: true # zizmor: ignore[artipacked]
+      - name: Update summary in README
+        uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # v1.46.3
+        with:
+          command: "readme"
+        env:
+          GH_PAT: ${{ github.token }}
